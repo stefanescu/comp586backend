@@ -1,16 +1,13 @@
 package com.comp586.backend.model;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-
-import org.hibernate.annotations.NaturalId;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
@@ -21,7 +18,7 @@ import org.hibernate.annotations.NaturalId;
             "email"
         })
 })
-public class User{
+public class UserOld {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -45,23 +42,14 @@ public class User{
     private String password;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_roles", 
-    	joinColumns = @JoinColumn(name = "user_id"), 
+    @JoinTable(name = "user_roles",
+    	joinColumns = @JoinColumn(name = "user_id"),
     	inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
+    public UserOld() {}
 
-    private ArrayList<Long> friends;
-
-    @OneToMany( mappedBy = "user",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
-    private List<Post> postList = new ArrayList<>();
-
-
-    public User() {}
-
-    public User(String name, String username, String email, String password) {
+    public UserOld(String name, String username, String email, String password) {
         this.name = name;
         this.username = username;
         this.email = email;
@@ -114,15 +102,5 @@ public class User{
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
-    }
-
-    public void addPost(Post p) {
-        postList.add(p);
-        p.setUser(this);
-    }
-
-    public void removeComment(Post p) {
-        postList.remove(p);
-        p.setUser(null);
     }
 }
