@@ -1,10 +1,12 @@
 package com.comp586.backend.controller;
 
+import com.comp586.backend.message.response.ResponseMessage;
 import com.comp586.backend.message.response.ResponseUsers;
 import com.comp586.backend.model.Post;
 import com.comp586.backend.model.User;
 import com.comp586.backend.repository.PostRepository;
 import com.comp586.backend.repository.UserRepository;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,24 +35,11 @@ public class TestRestAPIs {
 		return ">>> User Contents!";
 	}
 
-//	@GetMapping("/api/test/pm")
-//	@PreAuthorize("hasRole('PM') or hasRole('ADMIN')")
-//	public String projectManagementAccess() {
-//		return ">>> Project Management Board";
-//	}
-//
-	@GetMapping("/api/test/admin")
+	@GetMapping(value = "/api/test/admin")
 	@PreAuthorize("hasRole('ADMIN')")
     @ResponseBody
 	public ResponseUsers adminAccess() {
-
-//        Post p = new Post("abc", "bbb", new User("Stefan", "stfn", "stfn@abc.com", "123456" ));
-//
-//        postRepository.save(p);
-
         List<User> usrs = userRepository.findAll();
-
         return new ResponseUsers(usrs);
-//        return ">>> Admin Contents";
 	}
 }
